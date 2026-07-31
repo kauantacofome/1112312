@@ -1,5 +1,6 @@
 local plr = game.Players.LocalPlayer
-local char = plr.Character or plr.CharacterAdded:Wait()
+local char = plr.Character
+if not char then char = plr.CharacterAdded:Wait() end
 local hrp = char:FindFirstChild("HumanoidRootPart")
 local hum = char:FindFirstChild("Humanoid")
 local pg = plr:PlayerGui
@@ -108,15 +109,11 @@ local function runCycle()
     firePrompt(bunta)
     task.wait(2)
 
-    -- Click "Do you have a job for me?"
     clickText("job for me")
     task.wait(2)
-
-    -- Click "Sure, I'll take it"
     clickText("Sure")
     task.wait(3)
 
-    -- Get quest target
     local targetName = getQuestTarget()
     if not targetName then
         task.wait(3)
@@ -128,7 +125,6 @@ local function runCycle()
         return
     end
 
-    -- Teleport to delivery NPC
     local pos = NPC_POS[targetName]
     if not pos then
         local npc = findNPC(targetName)
@@ -159,7 +155,7 @@ while true do
         hrp = char:FindFirstChild("HumanoidRootPart")
         hum = char:FindFirstChild("Humanoid")
     end
-    local ok, err = pcall(runCycle)
+    local ok = pcall(runCycle)
     if not ok then
         task.wait(5)
     else
